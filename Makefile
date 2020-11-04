@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wpedantic -fPIC -g
-OBJECTS = DebugProfiler.o File.o Hash.o Lex.o Random.o \
+OBJECTS = File.o Hash.o Lex.o Random.o \
 		StringBuilder.o TimeUtil.o Vector.o
 
 all: compile ar_a ar_so
@@ -19,9 +19,6 @@ ar_so: $(OBJECTS)
 clean:
 	touch $(OBJECTS) && rm $(OBJECTS)
 	mkdir -p build && rm -r build
-
-DebugProfiler.o: DebugProfiler.c G64.h
-		$(CC) -c DebugProfiler.c $(CFLAGS)
 
 File.o: File.c G64.h
 		$(CC) -c File.c $(CFLAGS)
