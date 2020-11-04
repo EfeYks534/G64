@@ -1,8 +1,9 @@
 #pragma once
 
 #include <stdint.h>
+#include <time.h>
 
-void SetTimeDiff(uint8_t i); //  Mark the current time on `i`
+struct timespec GetCurrentTime(); // Get the current time
 
-double GetTimeDiff(uint8_t i); // Get the difference between current time and last marked time in `seconds.milliseconds` format
+double GetTimeDifference(struct timespec *now, struct timespec *last); // Get the difference between `now` and `last` in `seconds.milliseconds` format
 

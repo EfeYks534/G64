@@ -1,26 +1,19 @@
 #define _GNU_SOURCE
 #include "TimeLib.h"
 #include <stdint.h>
-#include <stdlib.h>
 #include <time.h>
 
-static struct timespec *starts = NULL;
-static struct timespec *ends = NULL;
-
-void SetTimeDiff(uint8_t i)
+struct timespec GetCurrentTime()
 {
-	if(starts == NULL) starts = malloc(sizeof(struct timespec)*256);
-	if(ends == NULL) ends = malloc(sizeof(struct timespec)*256);
-	clock_gettime(CLOCK_MONOTONIC_RAW, &(starts[i]));
+	struct timespec t;
+	clock_gettime(CLOCK_MONOTONIC_RAW, &t);
+	return t;
 }
 
-double GetTimeDiff(uint8_t i)
+double GetTimeDifference(struct timespec *now, struct timespec *last)
 {
-	if(starts == NULL) starts = malloc(sizeof(struct timespec)*256);
-	if(ends == NULL) ends = malloc(sizeof(struct timespec)*256);
-	clock_gettime(CLOCK_MONOTONIC_RAW, &(ends[i]));
-	double seconds = ends[i].tv_sec-starts[i].tv_sec;
-	double nanos = (ends[i].tv_nsec-starts[i].tv_nsec);
-	return seconds+nanos/1000000000;
+	double secs = now->tv_sec - last->tv_sec;
+	double nanos = now->tv_nsec - last->tv_nsec;
+	return secs + nanos / 1000000000;
 }
 
