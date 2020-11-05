@@ -1,60 +1,63 @@
 #include "HashLib.h"
+#include <signal.h>
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
 
-HashEntry *HashEntryNew(int32_t size, uint8_t *name, void *val)
+static uint64_t HashDefaultFunction(uint8_t *data, uint32_t size)
+{
+	uint64_t hash = 0;
+	for(int i = 0; i < size; i++) {
+		hash = ( data[i] + (hash << ( i % 63 + 1 )) + hash );
+		uint8_t sh = (size + i) % 63 + 1;
+		hash = (hash >> sh) | (hash << ( (8 << 3) - sh ) );
+	}
+	return hash;
+}
+
+HashEntry *HashEntryNew(uint8_t *name, int32_t size, void *val)
 {
 	HashEntry *entry = malloc(sizeof(HashEntry));
 	*entry = (HashEntry) { size, name, val, NULL };
 	return entry;
 }
 
-void HashEntryDelete(HashEntry *entry, int8_t type)
+void HashEntryDelete(HashEntry *entry)
 {
-	switch(type)
-	{
-	case '*':
-		free(entry->name);
-		free(entry->value);
-		break;
-	case 'v':
-		free(entry->value);
-		break;
-	case 'n':
-		free(entry->name);
-		break;
-	default: break;
-	}
+	HashEntry *last = entry;
 	while(entry->next != NULL) {
-		entry->size = entry->next->size;
+		free(entry->name);
 		entry->name = entry->next->name;
 		entry->value = entry->next->value;
+		entry->size = entry->next->size;
 		entry = entry->next;
+		last = entry;
 	}
 	free(entry);
+	last->next = NULL;
 }
 
-HashMap *HashMapNew(int32_t size)
+HashMap *HashMapNew(int32_t size, uint64_t (*hash_fun) (uint8_t*, uint32_t) )
 {
 	HashMap *map = malloc(sizeof(HashMap));
-	*map = (HashMap) { size, calloc(size, sizeof(HashEntry*)) };
+	if(hash_fun == NULL) hash_fun = HashDefaultFunction;
+	*map = (HashMap) { size, calloc(size, sizeof(HashEntry*)), hash_fun };
 	return map;
 }
 
-void HashMapDelete(HashMap *map, int8_t type)
+void HashMapDelete(HashMap *map)
 {
-	while(map->entry[0] != NULL) HashEntryDelete(map->entry[0], type);
+	while(map->entry[0] != NULL) HashEntryDelete(map->entry[0]);
 	free(map->entry);
 	free(map);
 }
 
-void HashPut(HashMap *map, int32_t size, uint8_t *name, void *value)
+void HashPut(HashMap *map, uint8_t *name, int32_t size, void *value)
 {
-	uint64_t hash = GetHash( name, size) % map->size;
+	uint64_t hash = map->hash_fun(name, size) % map->size;
 	HashEntry *entry = map->entry[hash];
 	if(entry == NULL) {
-		map->entry[hash] = HashEntryNew(size, name, value);
+		map->entry[hash] = HashEntryNew(name, size, value);
 		return;
 	}
 	while(1) {
@@ -64,21 +67,21 @@ void HashPut(HashMap *map, int32_t size, uint8_t *name, void *value)
 				return;
 			}
 		if(entry->next == NULL) {
-			entry->next = HashEntryNew(size, name, value);
+			entry->next = HashEntryNew(name, size, value);
 			return;
 		}
 		entry = entry->next;
 	}
 }
-void HashDelete(HashMap *map, int32_t size, uint8_t *name, char type)
+void HashDelete(HashMap *map, uint8_t *name, int32_t size)
 {
-	uint64_t hash = GetHash(name, size) % map->size;
+	uint64_t hash = map->hash_fun(name, size) % map->size;
 	HashEntry *entry = map->entry[hash];
 	if(entry == NULL) return;
 	while(1) {
 		if(size == entry->size)
 			if(memcmp(name, entry->name, size) == 0) {
-				HashEntryDelete(entry, type);
+				HashEntryDelete(entry);
 				return;
 			}
 		if(entry->next == NULL) return;
@@ -86,16 +89,16 @@ void HashDelete(HashMap *map, int32_t size, uint8_t *name, char type)
 	}
 }
 
-void *HashFind(HashMap *map, int32_t size, uint8_t *name)
+void *HashFind(HashMap *map, uint8_t *name, int32_t size)
 {
-	HashEntry *entry = HashFindEntry(map, size, name);
+	HashEntry *entry = HashFindEntry(map, name, size);
 	if(entry == NULL) return NULL;
 	return entry->value;
 }
 
-HashEntry *HashFindEntry(HashMap *map, int32_t size, uint8_t *name)
+HashEntry *HashFindEntry(HashMap *map, uint8_t *name, int32_t size)
 {
-	uint64_t hash = GetHash(name, size) % map->size;
+	uint64_t hash = map->hash_fun(name, size) % map->size;
 	HashEntry *entry = map->entry[hash];
 	if(entry == NULL) return NULL;
 	while(1) {

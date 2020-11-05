@@ -2,9 +2,7 @@
 
 #include <stdint.h>
 
-#define HASH_MAP_SIZE 8192
-
-uint64_t GetHash(const uint8_t *data, uint32_t size);
+#define HASH_MAP_SIZE 100
 
 typedef struct HashEntry
 {
@@ -14,29 +12,27 @@ typedef struct HashEntry
 	struct HashEntry *next; // This is a linked list
 } HashEntry;
 
-HashEntry *HashEntryNew(int32_t size, uint8_t *name, void *val); // new hash entry
+HashEntry *HashEntryNew(uint8_t *name, int32_t size, void *val); // new hash entry
 
-// type : '*' -> frees all the resources | 'v' -> frees the value | 'n' -> frees the name | other -> don't free
-void HashEntryDelete(HashEntry *entry, int8_t type);
+void HashEntryDelete(HashEntry *entry); // delete hash entry
 
 typedef struct HashMap
 {
-	int32_t size;
-	HashEntry **entry;
+	int32_t        size;
+	HashEntry   **entry;
+	uint64_t (*hash_fun) (uint8_t*, uint32_t);
 } HashMap;
 
-HashMap *HashMapNew(int32_t size); // new hash map
+HashMap *HashMapNew(int32_t size, uint64_t (*hash_fun) (uint8_t*, uint32_t) ); // new hash map
 
-// type : '*' -> frees all the resources | 'v' -> frees the values | 'n' -> frees the names | other -> don't free
-void HashMapDelete(HashMap *map, int8_t type);
+void HashMapDelete(HashMap *map); // delete hash map
 
-void HashPut(HashMap *map, int32_t size, uint8_t *name, void *value); // put the value to hashmap
+void HashPut(HashMap *map, uint8_t *name, int32_t size, void *value); // put the value to hashmap
 
-// type : '*' -> frees all the resources | 'v' -> frees the values | 'n' -> frees the names | other -> don't free
-void HashDelete(HashMap *map, int32_t size, uint8_t *name, char type); // delete the corresponding hash entry
+void HashDelete(HashMap *map, uint8_t *name, int32_t size); // delete the corresponding hash entry
 
-void *HashFind(HashMap *map, int32_t size, uint8_t *name); // find the corresponding value
+void *HashFind(HashMap *map, uint8_t *name, int32_t size); // find the corresponding value
 
-HashEntry *HashFindEntry(HashMap *map, int32_t size, uint8_t *name); // find the corresponding entry
+HashEntry *HashFindEntry(HashMap *map, uint8_t *name, int32_t size); // find the corresponding entry
 
 
