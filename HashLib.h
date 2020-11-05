@@ -12,9 +12,9 @@ typedef struct HashEntry
 	struct HashEntry *next; // This is a linked list
 } HashEntry;
 
-HashEntry *HashEntryNew(uint8_t *name, int32_t size, void *val); // new hash entry
+HashEntry *HashEntryNew(uint8_t *name, int32_t size, void *val); // New hash entry
 
-void HashEntryDelete(HashEntry *entry); // delete hash entry
+void HashEntryDelete(HashEntry *entry); // Delete hash entry
 
 typedef struct HashMap
 {
@@ -23,16 +23,16 @@ typedef struct HashMap
 	uint64_t (*hash_fun) (uint8_t*, uint32_t);
 } HashMap;
 
-HashMap *HashMapNew(int32_t size, uint64_t (*hash_fun) (uint8_t*, uint32_t) ); // new hash map
+HashMap *HashMapNew(int32_t size, uint64_t (*hash_fun) (uint8_t*, uint32_t) ); // New hash map
 
-void HashMapDelete(HashMap *map); // delete hash map
+void HashMapDelete(HashMap *map); // Delete hash map
 
-void HashPut(HashMap *map, uint8_t *name, int32_t size, void *value); // put the value to hashmap
+void HashPut(HashMap *map, uint8_t *name, int32_t size, void *value); // Put the value to hashmap
 
-void HashDelete(HashMap *map, uint8_t *name, int32_t size); // delete the corresponding hash entry
+void HashDelete(HashMap *map, uint8_t *name, int32_t size); // Delete the corresponding hash entry
 
-void *HashFind(HashMap *map, uint8_t *name, int32_t size); // find the corresponding value
+void *HashFind(HashMap *map, uint8_t *name, int32_t size); // Find the corresponding value
 
-HashEntry *HashFindEntry(HashMap *map, uint8_t *name, int32_t size); // find the corresponding entry
+HashEntry *HashFindEntry(HashMap *map, uint8_t *name, int32_t size); // Find the corresponding entry
 
 

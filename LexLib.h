@@ -55,11 +55,11 @@ typedef struct LexState
 	struct LexState   *last;
 } LexState;
 
-LexState *LexStateNew();
+LexState *LexStateNew(); // Make new lex state
 
-void LexStateDelete(LexState *lex);
+void LexStateDelete(LexState *lex); // Delete lex state
 
-int64_t  Lex(LexState *lex);
+int64_t  Lex(LexState *lex); // Lex
 
-int64_t  LexPush(LexState **lex);
+int64_t  LexPush(LexState **lex); // Lex and set *lex to *lex->next
 

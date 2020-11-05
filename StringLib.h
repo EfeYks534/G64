@@ -9,11 +9,10 @@ typedef struct StringBuilder
 	uint32_t    top;
 } StringBuilder;
 
-StringBuilder *StringBuilderNew();
+StringBuilder *StringBuilderNew(); // Make new string builder
 
-void StringBuilderAppend(StringBuilder *builder, const char *format, ...);
+void StringBuilderAppend(StringBuilder *builder, const char *format, ...); // Append to string builder
 
-char *StringBuild(StringBuilder *builder);
+char *StringBuild(StringBuilder *builder); // Build string from string builder
 
-void StringBuilderDelete(StringBuilder *builder);
-
+void StringBuilderDelete(StringBuilder *builder); // Delete string builder
