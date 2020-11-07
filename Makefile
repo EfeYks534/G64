@@ -16,9 +16,16 @@ ar_so: $(OBJECTS)
 	$(CC) -shared $(OBJECTS) -o build/libG64.so
 	chmod -X build/libG64.so
 
+copy_lib:
+	sudo cp build/libG64.a /usr/lib/libG64.a
+	sudo cp build/libG64.so /usr/lib/libG64.so
+	sudo cp *.h /usr/include/G64/
+
 clean:
-	touch $(OBJECTS) && rm $(OBJECTS)
-	mkdir -p build && rm -r build
+	touch $(OBJECTS)
+	rm $(OBJECTS)
+	mkdir -p build
+	rm -r build
 
 File.o: File.c G64.h
 		$(CC) -c File.c $(CFLAGS)
