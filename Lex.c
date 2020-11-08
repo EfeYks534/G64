@@ -67,12 +67,15 @@ long int Lex(LexState *lex)
 	char *source = lex->source;
 	unsigned int pos = lex->pos;
 	long int token;
-	int buf_len = strlen(lex->source);
-	char *buf = memset(lex->buf, 0, buf_len);
+	char *buf = lex->buf;
+	int line = lex->line;
 
 	while(1) {
 		char ch = source[pos++];
-		while(isspace(ch)) ch = source[pos++];
+		while(isspace(ch)) {
+			if(ch == '\n') line++;
+			ch = source[pos++];
+		}
 
 		switch(ch)
 		{
@@ -115,9 +118,10 @@ long int Lex(LexState *lex)
 					ch = source[pos++];
 				}
 
-				buf[i] = 0;
-				lex->cur_str = memcpy(malloc(i+1), buf, i+1);
+				lex->cur_str = memcpy(malloc(i+1), buf, i);
+				lex->cur_str[i] = 0;
 				lex->str_len = i + 1;
+				memset(buf, 0, i);
 				pos--;
 				goto lex_end;
 			}
@@ -170,9 +174,10 @@ lex_num_end:
 					ch = LexGetch(source, &pos);
 				}
 				if(i == 0) goto lex_error;
-				buf[i] = 0;
-				lex->cur_str = memcpy(malloc(i+1), buf, i+1);
+				lex->cur_str = memcpy(malloc(i+1), buf, i);
+				lex->cur_str[i] = 0;
 				lex->str_len = i+1;
+				memset(buf, 0, i);
 				goto lex_end;
 			}
 		case '\'': {
@@ -203,5 +208,6 @@ lex_end:
 	lex->source = source;
 	lex->error = lex->last->error;
 	lex->buf = lex->last->buf;
+	lex->line = line;
 	return token;
 }

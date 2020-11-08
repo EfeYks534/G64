@@ -50,6 +50,7 @@ typedef struct LexState
 	void            (*error)(struct LexState*, int64_t );
 	char            *source;
 	uint32_t            pos;
+	uint32_t           line;
 	char               *buf;
 	struct LexState   *next;
 	struct LexState   *last;
