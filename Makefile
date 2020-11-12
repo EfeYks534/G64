@@ -3,16 +3,11 @@ CFLAGS = -Wall -Wpedantic -fPIC -g
 OBJECTS = File.o Hash.o Lex.o Random.o \
 		StringBuilder.o TimeUtil.o Vector.o
 
-all: compile ar_a ar_so
-	rm $(OBJECTS)
+all: $(OBJECTS)
 
-compile: $(OBJECTS)
+lib: $(OBJECTS)
 	mkdir -p build
-
-ar_a: $(OBJECTS)
 	ar rcs build/libG64.a $(OBJECTS)
-
-ar_so: $(OBJECTS)
 	$(CC) -shared $(OBJECTS) -o build/libG64.so
 	chmod -X build/libG64.so
 
@@ -22,28 +17,26 @@ copy_lib:
 	sudo cp *.h /usr/include/G64/
 
 clean:
-	touch $(OBJECTS)
-	rm $(OBJECTS)
-	mkdir -p build
 	rm -r build
+	rm $(OBJECTS)
 
-File.o: File.c G64.h
+File.o: File.c FileLib.h
 		$(CC) -c File.c $(CFLAGS)
 
-Hash.o: Hash.c G64.h
+Hash.o: Hash.c HashLib.h
 		$(CC) -c Hash.c $(CFLAGS)
 
-Lex.o: Lex.c G64.h
+Lex.o: Lex.c LexLib.h
 		$(CC) -c Lex.c $(CFLAGS)
 
-Random.o: Random.c G64.h
+Random.o: Random.c RndLib.h
 		$(CC) -c Random.c $(CFLAGS)
 
-StringBuilder.o: StringBuilder.c G64.h
+StringBuilder.o: StringBuilder.c StringLib.h
 		$(CC) -c StringBuilder.c $(CFLAGS)
 
-TimeUtil.o: TimeUtil.c G64.h
+TimeUtil.o: TimeUtil.c TimeLib.h
 		$(CC) -c TimeUtil.c $(CFLAGS)
 
-Vector.o: Vector.c G64.h
+Vector.o: Vector.c VectorLib.h
 		$(CC) -c Vector.c $(CFLAGS)
