@@ -23,14 +23,14 @@ HashEntry *HashEntryNew(uint8_t *name, int32_t size, void *val)
 
 void HashEntryDelete(HashEntry *entry)
 {
-	HashEntry *last = entry;
+	HashEntry *last = NULL;
 	while(entry->next != NULL) {
+		last = entry;
 		free(entry->name);
 		entry->name = entry->next->name;
 		entry->value = entry->next->value;
 		entry->size = entry->next->size;
 		entry = entry->next;
-		last = entry;
 	}
 	free(entry);
 	last->next = NULL;

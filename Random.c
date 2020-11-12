@@ -17,14 +17,9 @@ uint64_t RNG()
 	return val;
 }
 
-void FillRNG(void *ptr, size_t size, uint32_t nmemb)
+void FillRNG(void *ptr, size_t size)
 {
-	uint8_t buf[size];
-
-	for(int i = 0; i < nmemb; i++) {
-		if(getrandom(&buf, size, 0) == -1)
-			for(int j = 0; i < size; j++)
-				buf[j] = (uint8_t) rand();
-		memcpy((uint8_t*)ptr + size * i, buf, size);
-	}
+	if(getrandom(ptr, size, 0) == -1)
+		for(int i = 0; i < size; i++)
+			((uint8_t*)ptr)[i] = (uint8_t) rand();
 }
