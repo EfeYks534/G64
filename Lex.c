@@ -17,7 +17,6 @@ void LexStateDelete(LexState *lex)
 	free(lex);
  
 }
-
 char LexGetch(char *source, unsigned int *posv)
 {
 	unsigned int pos = *posv;

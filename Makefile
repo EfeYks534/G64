@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wpedantic -fPIC -g
 OBJECTS = File.o Hash.o Lex.o Random.o \
 		StringBuilder.o TimeUtil.o Vector.o
 
-all: $(OBJECTS)
+all: $(OBJECTS) lib
 
 lib: $(OBJECTS)
 	mkdir -p build

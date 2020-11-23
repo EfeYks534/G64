@@ -1,5 +1,6 @@
 #include "HashLib.h"
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
 
@@ -9,7 +10,7 @@ static uint64_t HashDefaultFunction(uint8_t *data, uint32_t size)
 	for(int i = 0; i < size; i++) {
 		hash = ( data[i] + (hash << ( i % 63 + 1 )) + hash );
 		uint8_t sh = (size + i) % 63 + 1;
-		hash = (hash >> sh) | (hash << ( (8 << 3) - sh ) );
+		hash = (hash >> sh) | (hash << ( (1 << 3) - sh ) );
 	}
 	return hash;
 }
@@ -23,17 +24,18 @@ HashEntry *HashEntryNew(uint8_t *name, int32_t size, void *val)
 
 void HashEntryDelete(HashEntry *entry)
 {
-	HashEntry *last = NULL;
+	if(entry == NULL) return;
+	HashEntry *last = entry;
 	while(entry->next != NULL) {
 		last = entry;
-		free(entry->name);
 		entry->name = entry->next->name;
 		entry->value = entry->next->value;
 		entry->size = entry->next->size;
 		entry = entry->next;
 	}
 	free(entry);
-	last->next = NULL;
+	if(entry != last)
+		last->next = NULL;
 }
 
 HashMap *HashMapNew(int32_t size, uint64_t (*hash_fun) (uint8_t*, uint32_t) )
@@ -46,7 +48,8 @@ HashMap *HashMapNew(int32_t size, uint64_t (*hash_fun) (uint8_t*, uint32_t) )
 
 void HashMapDelete(HashMap *map)
 {
-	while(map->entry[0] != NULL) HashEntryDelete(map->entry[0]);
+	for(int i = 0; i < map->size; i++)
+		HashEntryDelete(map->entry[i]);
 	free(map->entry);
 	free(map);
 }
