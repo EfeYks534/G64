@@ -33,7 +33,7 @@
 #define TK_LESSER           0x1C // <
 #define TK_MODULUS          0x1D // %
 #define TK_COMMA            0x1E // ,
-
+#define TK_COUNT            0x1F // total token count
 
 
 #define TK_EOF -1
@@ -60,7 +60,8 @@ LexState *LexStateNew(); // Make new lex state
 
 void LexStateDelete(LexState *lex); // Delete lex state
 
-int64_t  Lex(LexState *lex); // Lex
+int64_t Lex(LexState *lex); // Lex
 
-int64_t  LexPush(LexState **lex); // Lex and set *lex to *lex->next
+int64_t LexPush(LexState **lex); // Lex and set *lex to *lex->next
 
+const char *GetTokenName(int64_t tok); // Get token name

@@ -4,6 +4,21 @@
 #include <string.h>
 #include <math.h>
 
+const char *token_name_table[] = {
+	"<unknown>", "<error>", "<eof>", "<identifier>", "<integer>",
+	"<float>", "<string>", "<char>", "'+'", "'-'", "'*'", "'/'",
+	 "'='", "'.'", "':'", "'$'", "'#'", "'('", "')'", "'['", "']'",
+	 "'{'", "'}'", "';'", "'|'", "'&'", "'^'", "'!'", "'~'", "'?'",
+	 "'>'", "'<'", "'%'", "','"
+};
+
+const char *GetTokenName(int64_t tok)
+{
+	if(tok < -3 || tok >= TK_COUNT)
+		return token_name_table[0];
+	return token_name_table[tok+3];
+}
+
 LexState *LexStateNew()
 {
 	LexState *lex = malloc(sizeof(LexState));
@@ -13,7 +28,7 @@ LexState *LexStateNew()
 
 void LexStateDelete(LexState *lex)
 {
-	if(lex->cur_str != NULL) free(lex->cur_str);
+	free(lex->cur_str);
 	free(lex);
  
 }
@@ -135,7 +150,7 @@ long int Lex(LexState *lex)
 					while(1) {
 						if(!isxdigit(ch) && isalpha(ch)) goto lex_error;	
 						if(!isxdigit(ch)) goto lex_num_end;
-						i = i * 16 + (isdigit(ch) ? (ch - '0') : (10 + toupper(ch) - 'A'));
+						i = i * 16 + (isdigit(ch) ? (ch-'0') : (10 + toupper(ch)-'A'));
 						ch = source[pos++];
 					}
 				}
