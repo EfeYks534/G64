@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-const char *token_name_table[] = {
+static const char *token_name_table[] = {
 	"<unknown>", "<error>", "<eof>", "<identifier>", "<integer>",
 	"<float>", "<string>", "<char>", "'+'", "'-'", "'*'", "'/'",
 	 "'='", "'.'", "':'", "'$'", "'#'", "'('", "')'", "'['", "']'",
