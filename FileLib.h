@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include <stdint.h>
 
 typedef struct File
@@ -16,3 +17,4 @@ void FileDelete(File *f); // Delete file
 
 int32_t FileSize(const char *path); // Size of path
 
+void DirectoryGetContents(const char *dir, char **names, size_t *size, size_t max); // Get a directory's contents
