@@ -40,14 +40,14 @@ void SetClockPriority(uint8_t pri)
 {
 	switch(pri)
 	{
-	case G64_PRIORITY_MEGA: priority = 1; break;
-	case G64_PRIORITY_ULTRA: priority = 2; break;
-	case G64_PRIORITY_VHIGH: priority = 4; break;
-	case G64_PRIORITY_HIGH: priority = 8; break;
-	case G64_PRIORITY_MEDIUM: priority = 16; break;
-	case G64_PRIORITY_SMALL: priority = 32; break;
-	case G64_PRIORITY_LOW: priority = 64; break;
-	case G64_PRIORITY_VLOW: priority = 128; break;
+	case G64_PRIORITY_MEGA: priority = 2; break;
+	case G64_PRIORITY_ULTRA: priority = 4; break;
+	case G64_PRIORITY_VHIGH: priority = 8; break;
+	case G64_PRIORITY_HIGH: priority = 16; break;
+	case G64_PRIORITY_MEDIUM: priority = 32; break;
+	case G64_PRIORITY_SMALL: priority = 64; break;
+	case G64_PRIORITY_LOW: priority = 128; break;
+	case G64_PRIORITY_VLOW: priority = 255; break;
 	default: priority = 16; break;
 	}
 }
