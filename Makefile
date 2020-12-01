@@ -10,8 +10,6 @@ lib: $(OBJECTS)
 	ar rcs build/libG64.a $(OBJECTS)
 	$(CC) -shared $(OBJECTS) -o build/libG64.so
 	chmod -X build/libG64.so
-
-copy_lib:
 	sudo cp build/libG64.a /usr/lib/libG64.a
 	sudo cp build/libG64.so /usr/lib/libG64.so
 	sudo cp *.h /usr/include/G64/
