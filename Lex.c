@@ -21,8 +21,7 @@ const char *GetTokenName(int64_t tok)
 
 LexState *LexStateNew()
 {
-	LexState *lex = malloc(sizeof(LexState));
-	memset(lex, 0, sizeof(LexState));
+	LexState *lex = calloc(sizeof(LexState), 1);
 	return lex;
 }
 

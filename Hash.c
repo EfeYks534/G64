@@ -8,9 +8,9 @@ static uint64_t HashDefaultFunction(uint8_t *data, uint32_t size)
 {
 	uint64_t hash = 0;
 	for(int i = 0; i < size; i++) {
-		hash = ( data[i] + (hash << ( i % 63 + 1 )) + hash );
-		uint8_t sh = (size + i) % 63 + 1;
-		hash = (hash >> sh) | (hash << ( (1 << 3) - sh ) );
+		hash += ( data[i] + (hash << ( i % 24 + 1 )));
+		uint8_t sh = (size + i) % 42 + 1;
+		hash ^= (hash << sh) | (hash >> 63 - sh);
 	}
 	return hash;
 }
