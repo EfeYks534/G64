@@ -3,14 +3,14 @@
 #include <stdint.h>
 #include <time.h>
 
-struct timespec GetCurrentTime()
+Time GetCurrentTime()
 {
 	struct timespec t;
 	clock_gettime(CLOCK_MONOTONIC_RAW, &t);
-	return t;
+	return (Time)t;
 }
 
-double GetTimeDifference(struct timespec *now, struct timespec *last)
+double GetTimeDifference(Time *now, Time *last)
 {
 	double secs = now->tv_sec - last->tv_sec;
 	double nanos = now->tv_nsec - last->tv_nsec;

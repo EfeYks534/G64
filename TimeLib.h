@@ -3,7 +3,9 @@
 #include <stdint.h>
 #include <time.h>
 
-struct timespec GetCurrentTime(); // Get the current time
+typedef struct timespec Time;
 
-double GetTimeDifference(struct timespec *now, struct timespec *last); // Get the difference between `now` and `last` in `seconds.milliseconds` format
+Time GetCurrentTime(); // Get the current time
+
+double GetTimeDifference(Time *now, Time *last); // Get the difference between `now` and `last` in `seconds.milliseconds` format
 
