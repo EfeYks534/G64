@@ -141,6 +141,7 @@ long int Lex(LexState *lex)
 			}
 		case '0'...'9': {
 				token = TK_INT;
+				int j = 0;
 				long int i = 0;
 				double f = 0;
 				if(source[pos] == 'x') {
@@ -164,7 +165,6 @@ long int Lex(LexState *lex)
 lex_float:
 				token = TK_FLOAT;
 				ch = source[pos++];
-				int j = 0;
 				f = i;
 				while(1) {
 					if(isalpha(ch)) goto lex_error;
