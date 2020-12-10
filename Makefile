@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wpedantic -fPIC -g
+CFLAGS = -Wall -Wpedantic -fPIC -O3 -g
 OBJECTS = File.o Hash.o Lex.o Random.o \
 		StringBuilder.o TimeUtil.o Vector.o
 

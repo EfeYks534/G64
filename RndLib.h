@@ -3,18 +3,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define G64_PRIORITY_MEGA   0x0
-#define G64_PRIORITY_ULTRA  0x1
-#define G64_PRIORITY_VHIGH  0x2
-#define G64_PRIORITY_HIGH   0x3
-#define G64_PRIORITY_MEDIUM 0x4
-#define G64_PRIORITY_SMALL  0x5
-#define G64_PRIORITY_LOW    0x6
-#define G64_PRIORITY_VLOW   0x7
-
-void SetClockPriority(uint8_t priority);
-
-int StartClock(); // Start high speed clock
+void InitRNG(); // Initialize random number generator
 
 uint64_t RNG64(); // Get a 64 bit random number
 
