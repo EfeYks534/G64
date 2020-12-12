@@ -9,7 +9,7 @@
 
 static pthread_mutex_t mutex;
 
-static uint64_t table[65536];
+static uint64_t table[4096];
 static uint64_t         top;
 static uint8_t        first;
 
@@ -24,7 +24,7 @@ void InitRNG()
 	struct timespec t;
 	clock_gettime(CLOCK_MONOTONIC_RAW, &t);
 	srand(seed * (time(NULL)+1) * (t.tv_nsec + 1));
-	for(int i = 0; i < 65536; i++)
+	for(int i = 0; i < 4096; i++)
 		table[i] = ( ((uint64_t)rand() << 31) || rand() ) ^ ((uint64_t)rand() << 32);
 	top = 0;
 }
@@ -32,7 +32,7 @@ void InitRNG()
 uint64_t RNG64()
 {
 	pthread_mutex_lock(&mutex);
-	if(top >= 65536) InitRNG();
+	if(top >= 4096) InitRNG();
 	uint64_t n = table[top++];
 	pthread_mutex_unlock(&mutex);
 	return n;
@@ -41,7 +41,7 @@ uint64_t RNG64()
 uint32_t RNG32()
 {
 	pthread_mutex_lock(&mutex);
-	if(top >= 65536) InitRNG();
+	if(top >= 4096) InitRNG();
 	uint64_t n = table[top++];
 	pthread_mutex_unlock(&mutex);
 	return n;
@@ -50,7 +50,7 @@ uint32_t RNG32()
 uint16_t RNG16()
 {
 	pthread_mutex_lock(&mutex);
-	if(top >= 65536) InitRNG();
+	if(top >= 4096) InitRNG();
 	uint64_t n = table[top++];
 	pthread_mutex_unlock(&mutex);
 	return n;
@@ -59,7 +59,7 @@ uint16_t RNG16()
 uint8_t RNG8()
 {
 	pthread_mutex_lock(&mutex);
-	if(top >= 65536) InitRNG();
+	if(top >= 4096) InitRNG();
 	uint64_t n = table[top++];
 	pthread_mutex_unlock(&mutex);
 	return n;
@@ -79,7 +79,7 @@ static uint8_t parity_table[] = {
 uint8_t RNGBool()
 {
 	pthread_mutex_lock(&mutex);
-	if(top >= 65536) InitRNG();
+	if(top >= 4096) InitRNG();
 	uint64_t n = table[top++];
 	pthread_mutex_unlock(&mutex);
 	return parity_table[n % 256];
