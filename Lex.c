@@ -175,6 +175,7 @@ lex_float:
 lex_num_end:
 				lex->cur_int = i;
 				lex->cur_float = f * pow(10, -j);
+				pos--;
 				goto lex_end;
 			}
 		case '"': {

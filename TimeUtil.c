@@ -7,7 +7,7 @@ Time GetCurrentTime()
 {
 	struct timespec t;
 	clock_gettime(CLOCK_MONOTONIC_RAW, &t);
-	return (Time)t;
+	return t;
 }
 
 double GetTimeDifference(Time *now, Time *last)
