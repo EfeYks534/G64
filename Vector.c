@@ -3,10 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 Vector *VectorNew(int32_t size)
 {
-	Vector *v = malloc(sizeof(Vector));
-	*v = (Vector) { size, 0, calloc(size, sizeof(void*)) };
+	Vector *v = (Vector*) malloc(sizeof(Vector));
+	*v = (Vector) { size, 0, (void**) calloc(size, sizeof(void*)) };
 	return v;
 }
 
@@ -54,8 +58,11 @@ void VectorResize(Vector *v, int32_t size)
 	if(size <= 0) return;
 	int32_t size_last = v->size;
 	v->size = size;
-	v->array = realloc(v->array, size*sizeof(void*));
+	v->array = (void**)realloc(v->array, size*sizeof(void*));
 	if(size > size_last)
 		memset(&(v->array[size_last]), 0, size-size_last);
 }
 
+#ifdef __cplusplus
+}
+#endif

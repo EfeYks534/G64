@@ -1,7 +1,10 @@
-#define _GNU_SOURCE
 #include "TimeLib.h"
 #include <stdint.h>
 #include <time.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 Time GetCurrentTime()
 {
@@ -17,3 +20,6 @@ double GetTimeDifference(Time *now, Time *last)
 	return secs + nanos / 1000000000;
 }
 
+#ifdef __cplusplus
+}
+#endif

@@ -4,6 +4,10 @@
 
 #define HASH_MAP_SIZE 100
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct HashEntry
 {
 	int32_t           size; // Entry name size
@@ -37,4 +41,6 @@ void *HashFind(HashMap *map, uint8_t *name, int32_t size); // Find the correspon
 
 HashEntry *HashFindEntry(HashMap *map, uint8_t *name, int32_t size); // Find the corresponding entry
 
-
+#ifdef __cplusplus
+}
+#endif

@@ -3,6 +3,10 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void InitRNG(); // Initialize random number generator
 
 uint64_t RNG64(); // Get a 64 bit random number
@@ -16,3 +20,7 @@ uint8_t RNG8(); // Get a 32 bit random number
 uint8_t RNGBool(); // Get a random boolean
 
 void FillRNG(uint8_t *ptr, size_t size); // Fill ptr with random numbers
+
+#ifdef __cplusplus
+}
+#endif

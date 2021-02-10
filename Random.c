@@ -7,6 +7,10 @@
 #include <sys/random.h>
 #include <pthread.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void InitRNG()
 {
 	uint64_t seed = 0;
@@ -54,6 +58,10 @@ uint8_t RNGBool()
 
 void FillRNG(uint8_t *_ptr, size_t size)
 {
-	for(int i = 0; i < size; i++)
+	for(size_t i = 0; i < size; i++)
 		_ptr[i] = rand();
 }
+
+#ifdef __cplusplus
+}
+#endif

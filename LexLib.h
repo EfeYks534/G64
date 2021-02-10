@@ -2,6 +2,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define TK_IDENT             0x0 // identifier
 #define TK_INT               0x1 // integer
 #define TK_FLOAT             0x2 // float
@@ -65,3 +69,7 @@ int64_t Lex(LexState *lex); // Lex
 int64_t LexPush(LexState **lex); // Lex and set *lex to *lex->next
 
 const char *GetTokenName(int64_t tok); // Get token name
+
+#ifdef __cplusplus
+}
+#endif

@@ -2,6 +2,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct Vector
 {
 	int32_t size;
@@ -23,3 +27,6 @@ void *VectorPopEl(Vector *v, int32_t id); // Pop the element i from the vector
 
 void VectorResize(Vector *v, int32_t size); // Resize the vector
 
+#ifdef __cplusplus
+}
+#endif

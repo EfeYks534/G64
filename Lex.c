@@ -4,6 +4,10 @@
 #include <string.h>
 #include <math.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 static const char *token_name_table[] = {
 	"<unknown>", "<error>", "<eof>", "<identifier>", "<integer>",
 	"<float>", "<string>", "<char>", "'+'", "'-'", "'*'", "'/'",
@@ -21,7 +25,7 @@ const char *GetTokenName(int64_t tok)
 
 LexState *LexStateNew()
 {
-	LexState *lex = calloc(sizeof(LexState), 1);
+	LexState *lex = (LexState*) calloc(sizeof(LexState), 1);
 	return lex;
 }
 
@@ -130,7 +134,7 @@ long int Lex(LexState *lex)
 					ch = source[pos++];
 				}
 
-				lex->cur_str = memcpy(malloc(i+1), buf, i);
+				lex->cur_str = (char*) memcpy(malloc(i+1), buf, i);
 				lex->cur_str[i] = 0;
 				lex->str_len = i + 1;
 				memset(buf, 0, i);
@@ -187,7 +191,7 @@ lex_num_end:
 					ch = LexGetch(source, &pos);
 				}
 				if(i == 0) goto lex_error;
-				lex->cur_str = memcpy(malloc(i + 1), buf, i);
+				lex->cur_str = (char*) memcpy(malloc(i + 1), buf, i);
 				lex->cur_str[i] = 0;
 				lex->str_len = i + 1;
 				memset(buf, 0, i);
@@ -224,3 +228,7 @@ lex_end:
 	lex->line = line;
 	return token;
 }
+
+#ifdef __cplusplus
+}
+#endif

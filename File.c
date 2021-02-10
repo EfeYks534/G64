@@ -6,9 +6,13 @@
 #include <dirent.h>
 #include <string.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 File *FileRead(const char *path)
 {
-	File *file = malloc(sizeof(File));
+	File *file = (File*) malloc(sizeof(File));
 	file->size = 0;
 	file->data = NULL;
 
@@ -18,7 +22,7 @@ File *FileRead(const char *path)
 		file->size = ftell(f);
 		fseek(f, 0, SEEK_SET);
 
-		file->data = malloc(file->size);
+		file->data = (char*) malloc(file->size);
 		fread(file->data, 1, file->size, f);
 
 		fclose(f);
@@ -65,10 +69,10 @@ void DirectoryGetContents(const char *path, char **names, size_t *size, size_t m
 	DIR *dir = opendir(path);
 
 	struct dirent *ent = readdir(dir);
-	int i = 0;
+	size_t i = 0;
 	while(ent != NULL) {
 		if(i >= max) break;
-		names[i] = calloc(strlen(ent->d_name) + 2, 1);
+		names[i] = (char*)calloc(strlen(ent->d_name) + 2, 1);
 		memcpy(names[i], ent->d_name, strlen(ent->d_name));
 		names[i][strlen(ent->d_name)+1] = ent->d_type;
 		i++;
@@ -78,3 +82,7 @@ void DirectoryGetContents(const char *path, char **names, size_t *size, size_t m
 	*size = i;
 	closedir(dir);
 }
+
+#ifdef __cplusplus
+}
+#endif

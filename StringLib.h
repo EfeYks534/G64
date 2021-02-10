@@ -2,6 +2,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct StringBuilder
 {
 	char    *string;
@@ -16,3 +20,7 @@ void StringBuilderAppend(StringBuilder *builder, const char *format, ...); // Ap
 char *StringBuild(StringBuilder *builder); // Build string from string builder
 
 void StringBuilderDelete(StringBuilder *builder); // Delete string builder
+
+#ifdef __cplusplus
+}
+#endif
