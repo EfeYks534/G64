@@ -64,12 +64,11 @@ void DirectoryGetContents(const char *path, char **names, size_t *size, size_t m
 
 	DIR *dir = opendir(path);
 
-	// I'm setting `ent` to `1` so that the while loop doesn't jump to the end
 	struct dirent *ent = readdir(dir);
 	int i = 0;
 	while(ent != NULL) {
 		if(i >= max) break;
-		names[i] = calloc(strlen(ent->d_name) + 1, 1);
+		names[i] = calloc(strlen(ent->d_name) + 2, 1);
 		memcpy(names[i], ent->d_name, strlen(ent->d_name));
 		names[i][strlen(ent->d_name)+1] = ent->d_type;
 		i++;

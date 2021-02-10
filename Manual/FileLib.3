@@ -1,0 +1,63 @@
+.TH FileLib 3 "Dec. 15, 2020" "version 0"
+
+.SH NAME
+G64 FileLib functions
+.SH SYNOPSIS
+#include <G64/FileLib.h>
+.EX
+typedef struct File
+{
+	char*   data;
+	int32_t size;
+} File;
+
+.BI "File *FileRead(const char *path);"
+
+.BI "void FileWrite(File *f, const char *path);"
+
+.BI "void FileDelete(File *f);"
+
+.BI "int32_t FileSize(const char *path);"
+
+.BI "void DirectoryGetContents(const char *dir, char **names,
+.BI "		size_t *size, size_t max);"
+
+.EE
+
+.SH DESCRIPTION
+The FileRead function reads a full file from `path`. FileDelete
+function deallocates a File object. The FileSize function
+will get the size of the file on `path`. DirectoryGetContents
+function is the most complicated one among the functions.
+It will get the contents of `dir` including files, block
+devices, directories etc. It will store a maximum of `max`
+of these in `names`. It will store the count of entries read
+in `size`.
+.PP
+Contents will be stored in `names` with the following format.
+.EX
+
+name NUL type
+
+.EE
+A named pipe with the name `Hello` would be stored like this:
+.EX
+
+ 012345   6
+"Hello\\0DT_FIFO"
+
+.EE
+
+.SH RETURN VALUE
+FileRead returns a File*, it is recommended no to free it by
+hand and use FileDelete, note that FileDelete will also free
+the `f->data`. FileSize returns -1 if a file doesn't exist,
+otherwise it will just return the file size in bytes.
+
+.SH ERRORS
+On error, FileRead will return a file with `data` set to
+.BI NULL.
+DirectoryGetContents won't do anything at all when it encounters
+an error, best way to check errors on it is by checking `*size`.
+If `*size` is left unaffected then there is an error. Best practice
+is to set `*size` to `-1` before calling the function.

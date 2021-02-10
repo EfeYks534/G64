@@ -12,9 +12,11 @@ typedef struct HashEntry
 	struct HashEntry *next; // This is a linked list
 } HashEntry;
 
+uint64_t HashDefaultFunction(uint8_t *data, uint32_t size);
+
 HashEntry *HashEntryNew(uint8_t *name, int32_t size, void *val); // New hash entry
 
-void HashEntryDelete(HashEntry *entry); // Delete hash entry
+void HashEntryDelete(HashEntry **entry); // Delete hash entry
 
 typedef struct HashMap
 {

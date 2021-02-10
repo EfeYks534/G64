@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-static uint64_t HashDefaultFunction(uint8_t *data, uint32_t size)
+uint64_t HashDefaultFunction(uint8_t *data, uint32_t size)
 {
 	uint64_t hash = 0;
 	for(int i = 0; i < size; i++) {
@@ -22,8 +22,10 @@ HashEntry *HashEntryNew(uint8_t *name, int32_t size, void *val)
 	return entry;
 }
 
-void HashEntryDelete(HashEntry *entry)
+void HashEntryDelete(HashEntry **_entry)
 {
+	HashEntry *entry = *_entry;
+
 	if(entry == NULL) return;
 	HashEntry *last = entry;
 	while(entry->next != NULL) {
@@ -33,9 +35,13 @@ void HashEntryDelete(HashEntry *entry)
 		entry->size = entry->next->size;
 		entry = entry->next;
 	}
-	free(entry);
+
 	if(entry != last)
 		last->next = NULL;
+	else
+		*_entry = NULL;
+	
+	free(entry);
 }
 
 HashMap *HashMapNew(int32_t size, uint64_t (*hash_fun) (uint8_t*, uint32_t) )
@@ -49,7 +55,7 @@ HashMap *HashMapNew(int32_t size, uint64_t (*hash_fun) (uint8_t*, uint32_t) )
 void HashMapDelete(HashMap *map)
 {
 	for(int i = 0; i < map->size; i++)
-		HashEntryDelete(map->entry[i]);
+		HashEntryDelete(&map->entry[0]);
 	free(map->entry);
 	free(map);
 }
@@ -83,7 +89,7 @@ void HashDelete(HashMap *map, uint8_t *name, int32_t size)
 	while(1) {
 		if(size == entry->size)
 			if(memcmp(name, entry->name, size) == 0) {
-				HashEntryDelete(entry);
+				HashEntryDelete(&map->entry[hash]);
 				return;
 			}
 		if(entry->next == NULL) return;

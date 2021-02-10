@@ -82,10 +82,9 @@ long int Lex(LexState *lex)
 	long int token;
 	char *buf = lex->buf;
 	int line = lex->line;
-
 	while(1) {
 		char ch = source[pos++];
-		while(isspace(ch)) {
+		while(ch == '\n' || ch == ' ' || ch == '\t' || ch == '\v' || ch == '\a' || ch == '\r') {
 			if(ch == '\n') line++;
 			ch = source[pos++];
 		}
@@ -188,9 +187,9 @@ lex_num_end:
 					ch = LexGetch(source, &pos);
 				}
 				if(i == 0) goto lex_error;
-				lex->cur_str = memcpy(malloc(i+1), buf, i);
+				lex->cur_str = memcpy(malloc(i + 1), buf, i);
 				lex->cur_str[i] = 0;
-				lex->str_len = i+1;
+				lex->str_len = i + 1;
 				memset(buf, 0, i);
 				goto lex_end;
 			}
