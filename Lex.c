@@ -13,7 +13,7 @@ static const char *token_name_table[] = {
 	"<float>", "<string>", "<char>", "'+'", "'-'", "'*'", "'/'",
 	 "'='", "'.'", "':'", "'$'", "'#'", "'('", "')'", "'['", "']'",
 	 "'{'", "'}'", "';'", "'|'", "'&'", "'^'", "'!'", "'~'", "'?'",
-	 "'>'", "'<'", "'%'", "','"
+	 "'>'", "'<'", "'%'", "','", "<whitespace>"
 };
 
 const char *GetTokenName(int64_t tok)
@@ -88,7 +88,7 @@ long int Lex(LexState *lex)
 	int line = lex->line;
 	while(1) {
 		char ch = source[pos++];
-		while(ch == '\n' || ch == ' ' || ch == '\t' || ch == '\v' || ch == '\a' || ch == '\r') {
+		while((ch == '\n' || ch == ' ' || ch == '\t' || ch == '\r') && lex->skip_ws) {
 			if(ch == '\n') line++;
 			ch = source[pos++];
 		}
@@ -97,6 +97,10 @@ long int Lex(LexState *lex)
 		{
 		case 0:
 			token = TK_EOF;
+			goto lex_end;
+		case '\n': case ' ':
+		case '\t': case '\r':
+			token = TK_WHITESPACE;
 			goto lex_end;
 		case '+': token = TK_PLUS;			goto lex_end;
 		case '-': token = TK_MINUS;			goto lex_end;
@@ -225,6 +229,7 @@ lex_end:
 	lex->source = source;
 	lex->error = lex->last->error;
 	lex->buf = lex->last->buf;
+	lex->skip_ws = lex->last->skip_ws;
 	lex->line = line;
 	return token;
 }

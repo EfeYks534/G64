@@ -37,7 +37,8 @@ extern "C" {
 #define TK_LESSER           0x1C // <
 #define TK_MODULUS          0x1D // %
 #define TK_COMMA            0x1E // ,
-#define TK_COUNT            0x1F // total token count
+#define TK_WHITESPACE       0x1F // Any whitespace character
+#define TK_COUNT            0x20 // total token count
 
 
 #define TK_EOF -1
@@ -55,6 +56,7 @@ typedef struct LexState
 	char            *source;
 	uint32_t            pos;
 	uint32_t           line;
+	uint8_t         skip_ws;
 	char               *buf;
 	struct LexState   *next;
 	struct LexState   *last;
